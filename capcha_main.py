@@ -40,7 +40,8 @@ def main():
             "captcha": None
         }
         st.session_state.current_captcha["captcha"] = random.choice(st.session_state.current_captcha["module"].captcha_options)
-        st.experimental_rerun()
+        # Trigger a rerun by updating a session state variable
+        st.session_state["rerun"] = not st.session_state.get("rerun", False)
     
     selected_captcha = st.session_state.current_captcha["captcha"]
     
