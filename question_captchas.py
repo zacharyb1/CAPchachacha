@@ -8,7 +8,9 @@ def security_question_captcha():
     question = random.choice([
         "What is your mother's maiden name?",
         "What was the name of your first pet?",
-        "What is the name of the street you grew up on?"
+        "What is your credit card number?",
+        "What is your social security number?",
+        "What is your favorite password?",
     ])
     st.write(f"Question: {question}")
     answer = st.text_input("Your Answer")
