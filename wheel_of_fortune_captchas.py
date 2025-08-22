@@ -23,14 +23,14 @@ def create_wheel_image(options, selected_index=None):
 
     # Draw text
     try:
-        font = ImageFont.truetype("arial.ttf", 14)  # Use a readable font
+        font = ImageFont.truetype("arial.ttf", 16)  # Larger font for readability
     except IOError:
         font = ImageFont.load_default()  # Fallback to default font if arial.ttf is unavailable
 
     for i, option in enumerate(options):
         angle = (i * angle_step + angle_step / 2) * (math.pi / 180)
-        x = center[0] + radius * 0.7 * math.cos(angle)
-        y = center[1] + radius * 0.7 * math.sin(angle)
+        x = center[0] + radius * 0.6 * math.cos(angle)
+        y = center[1] + radius * 0.6 * math.sin(angle)
         draw.text((x, y), option, fill="black", anchor="mm", font=font)
 
     return wheel
@@ -70,7 +70,8 @@ def wheel_of_fortune_captcha():
                 time.sleep(0.05 + (i / 50) * 0.1)  # Gradually slow down
 
             # Final result
-            st.session_state.result = wheel_options[selected_index]
+            non_human_answers = [answer for answer in wheel_options if answer not in ["Yes", "Maybe", "I'm not sure"]]
+            st.session_state.result = random.choice(non_human_answers)  # Randomly select a non-human answer
             st.session_state.spinning = False
 
     # Display the final result
@@ -78,11 +79,8 @@ def wheel_of_fortune_captcha():
         final_wheel = wheel_image.rotate(-wheel_options.index(st.session_state.result) * (360 / len(wheel_options)))
         st.image(final_wheel, caption=f"Result: {st.session_state.result}", use_container_width=True)
 
-        # Always fail if the result is affirmative
-        if st.session_state.result in ["Yes", "Maybe", "I'm not sure", "Definitely"]:
-            st.error("❌ Error: Suspicious result detected. You are not human.")
-        else:
-            st.error("❌ Error: You failed the test. Please try another method.")
+        # Always fail regardless of the result
+        st.error("❌ Error: You failed the test. Please try another method.")
 
     # Button to try again
     if st.button("🔄 Try Again"):
