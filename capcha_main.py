@@ -26,8 +26,23 @@ def main():
     captcha_modules = load_captcha_modules()
     
     # Randomly select a CAPTCHA module and challenge
-    selected_module = random.choice(captcha_modules)
-    selected_captcha = random.choice(selected_module.captcha_options)
+    if 'current_captcha' not in st.session_state:
+        st.session_state.current_captcha = {
+            "module": random.choice(captcha_modules),
+            "captcha": None
+        }
+        st.session_state.current_captcha["captcha"] = random.choice(st.session_state.current_captcha["module"].captcha_options)
+    
+    # Button to try another CAPTCHA method (at the top)
+    if st.button("🔄 Try Another Method"):
+        st.session_state.current_captcha = {
+            "module": random.choice(captcha_modules),
+            "captcha": None
+        }
+        st.session_state.current_captcha["captcha"] = random.choice(st.session_state.current_captcha["module"].captcha_options)
+        st.experimental_rerun()
+    
+    selected_captcha = st.session_state.current_captcha["captcha"]
     
     # Display the selected CAPTCHA challenge
     st.write("---")
