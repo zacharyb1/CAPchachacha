@@ -1,10 +1,10 @@
 import streamlit as st
 import random
 import time
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import math
 
-def create_wheel_image(options):
+def create_wheel_image(options, selected_index=None):
     """Create a fortune wheel image with the given options."""
     size = 300  # Diameter of the wheel
     wheel = Image.new("RGBA", (size, size), (255, 255, 255, 0))
@@ -18,15 +18,20 @@ def create_wheel_image(options):
     for i, option in enumerate(options):
         start_angle = i * angle_step
         end_angle = (i + 1) * angle_step
-        color = (200, 200, 255) if i % 2 == 0 else (255, 200, 200)
+        color = (255, 200, 200) if i == selected_index else (200, 200, 255)
         draw.pieslice([0, 0, size, size], start_angle, end_angle, fill=color)
 
     # Draw text
+    try:
+        font = ImageFont.truetype("arial.ttf", 14)  # Use a readable font
+    except IOError:
+        font = ImageFont.load_default()  # Fallback to default font if arial.ttf is unavailable
+
     for i, option in enumerate(options):
         angle = (i * angle_step + angle_step / 2) * (math.pi / 180)
-        x = center[0] + radius * 0.6 * math.cos(angle)
-        y = center[1] + radius * 0.6 * math.sin(angle)
-        draw.text((x, y), option, fill="black", anchor="mm")
+        x = center[0] + radius * 0.7 * math.cos(angle)
+        y = center[1] + radius * 0.7 * math.sin(angle)
+        draw.text((x, y), option, fill="black", anchor="mm", font=font)
 
     return wheel
 
@@ -61,7 +66,7 @@ def wheel_of_fortune_captcha():
             for i in range(50):  # 50 frames of spinning
                 selected_index = (selected_index + 1) % num_options
                 rotated_wheel = wheel_image.rotate(-selected_index * (360 / num_options))
-                placeholder.image(rotated_wheel, caption="Spinning...", use_column_width=True)
+                placeholder.image(rotated_wheel, caption="Spinning...", use_container_width=True)
                 time.sleep(0.05 + (i / 50) * 0.1)  # Gradually slow down
 
             # Final result
@@ -71,7 +76,7 @@ def wheel_of_fortune_captcha():
     # Display the final result
     if st.session_state.result:
         final_wheel = wheel_image.rotate(-wheel_options.index(st.session_state.result) * (360 / len(wheel_options)))
-        st.image(final_wheel, caption=f"Result: {st.session_state.result}", use_column_width=True)
+        st.image(final_wheel, caption=f"Result: {st.session_state.result}", use_container_width=True)
 
         # Always fail if the result is affirmative
         if st.session_state.result in ["Yes", "Maybe", "I'm not sure", "Definitely"]:
