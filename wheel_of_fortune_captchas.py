@@ -70,7 +70,7 @@ def wheel_of_fortune_captcha():
                 time.sleep(0.05 + (i / 50) * 0.1)  # Gradually slow down
 
             # Final result
-            non_human_answers = [answer for answer in wheel_options if answer not in ["Yes", "Maybe", "I'm not sure"]]
+            non_human_answers = [answer for answer in wheel_options if answer != "Yes"]  # Exclude "Yes"
             st.session_state.result = random.choice(non_human_answers)  # Randomly select a non-human answer
             st.session_state.spinning = False
 
