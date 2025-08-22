@@ -13,7 +13,8 @@ def load_captcha_modules():
     """Load available CAPTCHA modules"""
     modules = [
         "camera_captchas",  # Camera-based CAPTCHAs
-        "question_captchas"  # Question-based CAPTCHAs
+        "question_captchas",  # Question-based CAPTCHAs
+        "wheel_of_fortune_captchas"  # Wheel of Fortune CAPTCHA
     ]
     return [importlib.import_module(module) for module in modules]
 
