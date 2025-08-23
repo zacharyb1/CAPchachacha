@@ -3,6 +3,8 @@ import random
 from potato import potato_detector_captcha
 from cat import cat_check_captcha
 from stare import staring_contest_captcha
+from age_verify import age_verification_captcha
+from voice_verify import voice_verification_captcha
 
 
 def init_session_state():
@@ -36,7 +38,9 @@ def main():
     captcha_options = {
         "🥔 Potato Detector": potato_detector_captcha,
         "🐱 The Cat Check": cat_check_captcha,
-    "👀 Staring Contest": staring_contest_captcha,
+        "👀 Staring Contest": staring_contest_captcha,
+        "🔢 Age Verification": age_verification_captcha,
+        "🎤 Voice Verification": voice_verification_captcha,
     }
 
     if st.button("🔄 Get New Stupid Captcha"):
@@ -46,6 +50,20 @@ def main():
         st.session_state.processing = False
         st.session_state.progress = 0
         st.session_state.staring_start_time = None
+        # Reset age verification state
+        if 'age_step' in st.session_state:
+            st.session_state.age_step = 1
+        if 'age_name' in st.session_state:
+            st.session_state.age_name = ""
+        if 'age_value' in st.session_state:
+            st.session_state.age_value = 0
+        if 'age_t9_input' in st.session_state:
+            st.session_state.age_t9_input = ""
+        if 'age_captcha_passed' in st.session_state:
+            st.session_state.age_captcha_passed = False
+        # Reset voice verification state
+        if 'voice_in_progress' in st.session_state:
+            st.session_state.voice_in_progress = False
         st.rerun()
 
     if st.session_state.current_captcha is None:
