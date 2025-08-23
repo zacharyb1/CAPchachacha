@@ -5,6 +5,8 @@ from cat import cat_check_captcha
 from stare import staring_contest_captcha
 from age_verify import age_verification_captcha
 from voice_verify import voice_verification_captcha
+from circle_draw import circle_draw_captcha
+from wheel_fortune import wheel_of_fortune_captcha
 
 
 def init_session_state():
@@ -36,11 +38,13 @@ def main():
     st.write("*Guaranteed to be unsolvable since 2024*")
 
     captcha_options = {
-        "🥔 Potato Detector": potato_detector_captcha,
-        "🐱 The Cat Check": cat_check_captcha,
-        "👀 Staring Contest": staring_contest_captcha,
-        "🔢 Age Verification": age_verification_captcha,
-        "🎤 Voice Verification": voice_verification_captcha,
+        # "🥔 Potato Detector": potato_detector_captcha,
+        # "🐱 The Cat Check": cat_check_captcha,
+        # "👀 Staring Contest": staring_contest_captcha,
+        # "🔢 Age Verification": age_verification_captcha,
+        # "🎤 Voice Verification": voice_verification_captcha,
+        # "⭕️ Perfect Circle": circle_draw_captcha,
+        "🎡 Wheel of Fortune": wheel_of_fortune_captcha,
     }
 
     if st.button("🔄 Get New Stupid Captcha"):
@@ -64,6 +68,11 @@ def main():
         # Reset voice verification state
         if 'voice_in_progress' in st.session_state:
             st.session_state.voice_in_progress = False
+        # Reset wheel of fortune state
+        if 'wheel_spinning' in st.session_state:
+            st.session_state.wheel_spinning = False
+        if 'wheel_result' in st.session_state:
+            st.session_state.wheel_result = None
         st.rerun()
 
     if st.session_state.current_captcha is None:

@@ -1,0 +1,5 @@
+streamlit
+opencv-python
+streamlit-drawable-canvas
+numpy
+Pillow
