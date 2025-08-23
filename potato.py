@@ -8,7 +8,7 @@ from camera_utils import get_camera_image, clear_camera_widget
 
 def potato_detector_captcha():
     st.subheader("🥔 Potato Detection Captcha")
-    st.write("Please take a picture showing exactly 3.7 potatoes in their natural habitat during a solar eclipse")
+    st.write("Please take a picture showing exactly 3.7 potatoes.")
     display_width = 240
 
     potato_bytes = get_camera_image('potato_image_bytes', 'potato_camera', "Take a picture of potatoes", display_width)

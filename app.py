@@ -7,6 +7,8 @@ from age_verify import age_verification_captcha
 from voice_verify import voice_verification_captcha
 from circle_draw import circle_draw_captcha
 from wheel_fortune import wheel_of_fortune_captcha
+from security_question import security_question_captcha
+from nipple_detector import nipple_detector_captcha
 
 
 def init_session_state():
@@ -22,6 +24,8 @@ def init_session_state():
         st.session_state.potato_image_bytes = None
     if 'cat_image_bytes' not in st.session_state:
         st.session_state.cat_image_bytes = None
+    if 'nipple_image_bytes' not in st.session_state:
+        st.session_state.nipple_image_bytes = None
 
 
 def main():
@@ -38,19 +42,29 @@ def main():
     st.write("*Guaranteed to be unsolvable since 2024*")
 
     captcha_options = {
-        # "🥔 Potato Detector": potato_detector_captcha,
-        # "🐱 The Cat Check": cat_check_captcha,
-        # "👀 Staring Contest": staring_contest_captcha,
-        # "🔢 Age Verification": age_verification_captcha,
-        # "🎤 Voice Verification": voice_verification_captcha,
-        # "⭕️ Perfect Circle": circle_draw_captcha,
+        "🥔 Potato Detector": potato_detector_captcha,
+        "🐱 The Cat Check": cat_check_captcha,
+        "👀 Staring Contest": staring_contest_captcha,
+        "🔢 Age Verification": age_verification_captcha,
+        "🎤 Voice Verification": voice_verification_captcha,
+        "⭕️ Perfect Circle": circle_draw_captcha,
         "🎡 Wheel of Fortune": wheel_of_fortune_captcha,
+        "🔒 Security Question": security_question_captcha,
+        "🔍 Nipple Detector": nipple_detector_captcha,
     }
 
     if st.button("🔄 Get New Stupid Captcha"):
-        st.session_state.current_captcha = random.choice(list(captcha_options.keys()))
+        # Get a different captcha (not the current one)
+        available_captchas = [key for key in captcha_options.keys() if key != st.session_state.current_captcha]
+        if available_captchas:  # Make sure we have other options
+            st.session_state.current_captcha = random.choice(available_captchas)
+        else:
+            # Fallback if somehow there's only one captcha (shouldn't happen)
+            st.session_state.current_captcha = random.choice(list(captcha_options.keys()))
+        
         st.session_state.potato_image_bytes = None
         st.session_state.cat_image_bytes = None
+        st.session_state.nipple_image_bytes = None
         st.session_state.processing = False
         st.session_state.progress = 0
         st.session_state.staring_start_time = None
@@ -73,6 +87,9 @@ def main():
             st.session_state.wheel_spinning = False
         if 'wheel_result' in st.session_state:
             st.session_state.wheel_result = None
+        # Reset security question state
+        if 'security_question' in st.session_state:
+            del st.session_state.security_question
         st.rerun()
 
     if st.session_state.current_captcha is None:
