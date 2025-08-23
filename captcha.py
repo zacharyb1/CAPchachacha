@@ -49,42 +49,42 @@ def init_session_state():
     if 'staring_start_time' not in st.session_state:
         st.session_state.staring_start_time = None
 
-def awkward_wait_captcha():
+def therapy_wait_captcha():
     # Auto-refresh every 1 second
-    st_autorefresh(interval=1000, key="awkward_refresh")
+    st_autorefresh(interval=1000, key="therapy_refresh")
     st.subheader("⏳ 1 Minute Therapy Captcha")
-    st.write("Please wait exactly 1 minute. If the countdown reaches 0, it will restart at 59 seconds.")
+    st.write("You have 1 minute to express your feelings to the therapist.")
 
     # Initialize session state variables before use
-    if "awkward_start_time" not in st.session_state:
-        st.session_state.awkward_start_time = time.time()
-    if "awkward_question" not in st.session_state:
-        st.session_state.awkward_question = random.choice(THERAPY_QUESTIONS)
-    if "awkward_answer" not in st.session_state:
-        st.session_state.awkward_answer = ""
+    if "therapy_start_time" not in st.session_state:
+        st.session_state.therapy_start_time = time.time()
+    if "therapy_question" not in st.session_state:
+        st.session_state.therapy_question = random.choice(THERAPY_QUESTIONS)
+    if "therapy_answer" not in st.session_state:
+        st.session_state.therapy_answer = ""
 
     # Countdown logic
-    elapsed = int(time.time() - st.session_state.awkward_start_time)
+    elapsed = int(time.time() - st.session_state.therapy_start_time)
     countdown = 60 - (elapsed % 60)
     if countdown == 60:
         countdown = 59
 
     st.write(f"⏳ Time remaining: {countdown} seconds")
     st.write("Therapist question:")
-    st.write(st.session_state.awkward_question)
+    st.write(st.session_state.therapy_question)
 
     # Use dynamic key so input box clears each time
-    input_key = f"awkward_input_{st.session_state.awkward_question}"
+    input_key = f"patient_input_{st.session_state.therapy_question}"
     new_answer = st.text_input(
-        "Type your awkward answer here (don’t worry, we won’t save it)",
+        "Type your answer here",
         key=input_key
     )
 
     # If user submits a new answer
-    if new_answer and new_answer != st.session_state.awkward_answer:
-        st.session_state.awkward_answer = new_answer
-        st.session_state.awkward_question = random.choice(THERAPY_QUESTIONS)
-        st.session_state.awkward_start_time = time.time()
+    if new_answer and new_answer != st.session_state.therapy_answer:
+        st.session_state.therapy_answer = new_answer
+        st.session_state.therapy_question = random.choice(THERAPY_QUESTIONS)
+        st.session_state.therapy_start_time = time.time()
         st.rerun()
 
 def main():
@@ -93,16 +93,11 @@ def main():
     
     st.title("🤖 World's Most Stupid Captcha System")
     st.write("*Guaranteed to be unsolvable since 2024*")
-    
-    # Only use the awkward wait captcha
-    captcha_options = {
-        "⏳ 1 Minute Therapy": awkward_wait_captcha
-    }
 
     st.write("---")
     st.subheader("Current Challenge: ⏳ 1 Minute Therapy")
 
-    awkward_wait_captcha()
+    therapy_wait_captcha()
     
     # Footer
     st.write("---")
